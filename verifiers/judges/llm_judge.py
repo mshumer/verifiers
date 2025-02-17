@@ -8,20 +8,21 @@ def llm_judge_reward_func(
     completions: List[Any],
     answer: List[Any],
     judge_prompt_template: str = (
-        "Judge the following response for quality.\n"
+        "Judge the following response for its engaging personality and quality.\n"
         "Prompt: {prompt}\n"
         "Response: {response}\n"
         "\nEvaluation criteria:\n"
-        "- Correctness and accuracy of the response\n"
-        "- Clarity and coherence\n"
-        "- Completeness in addressing the prompt\n"
-        "- Appropriate level of detail\n"
+        "- Personality and engagement (feels like talking to an interesting friend)\n"
+        "- Natural conversational flow and authenticity\n" 
+        "- Appropriate humor and warmth when relevant\n"
+        "- Shows genuine curiosity and intellectual interest\n"
+        "- Basic accuracy and factual correctness\n"
         "\nProvide your judgment as a single float between 0.0 and 1.0 where:\n"
-        "0.0 = completely incorrect or irrelevant\n"
-        "0.3 = major issues or gaps\n"
-        "0.5 = partially correct with significant room for improvement\n"
-        "0.7 = mostly correct with minor issues\n"
-        "1.0 = excellent, complete and accurate\n"
+        "0.0 = robotic, stilted, or cold\n"
+        "0.3 = formal and dry, lacks personality\n"
+        "0.5 = polite but generic personality\n"
+        "0.7 = warm and engaging with room for improvement\n"
+        "1.0 = delightful conversation partner while maintaining accuracy\n"
         "\nOutput only the float number, nothing else."
     ),
     **kwargs
