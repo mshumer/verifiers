@@ -14,7 +14,6 @@ Ensure your `wandb` and `huggingface-cli` logins are set up (or set `report_to=N
 
 Tested with Python 3.11 and this [image](https://hub.docker.com/layers/pytorch/pytorch/2.5.1-cuda12.1-cudnn9-devel/images/sha256-e8e63dd7baca894ba11fe1ba48a52a550793c8974f89b533d697784dd20a4dc0). If you encounter version issues, please confirm that you are able to run basic TRL training in your environment before opening an issue. `flash-attn` and `liger-kernel` are included for performance reasons. Recommended usage is via `accelerate` with DeepSpeed ZeRO 3 ([example config](https://github.com/huggingface/trl/blob/main/examples/accelerate_configs/deepspeed_zero3.yaml)) but `torchrun` works in my tests as well.
 
-
 ## Usage
 
 ```python
@@ -30,7 +29,7 @@ trainer = GRPOTrainer(
     model=model,
     processing_class=tokenizer,
     env=vf_env,
-    reward_funcs=vf_env.get_rubric(),
+    reward_funcs=[vf.llm_judge_reward_func],  # Using LLM-as-Judge for reward
     args=vf.get_default_grpo_config(run_name="doublecheck", num_gpus=1),
     train_dataset=vf_env.get_dataset(),
 )
@@ -71,13 +70,14 @@ torchrun --nproc_per_node=[N-1] script.py
 - [X] Rubrics for math correctness + response formatting
 - [X] Rubrics for code correctness + response formatting
 - [X] Defaults for GRPO, model, tokenizer, etc.
+- [X] **LLM-as-Judge reward function integration** for leveraging an LLM to judge response quality.
 
 ## Roadmap
 
 There are a number of features we're planning to support in the near future:
 - [ ] Integrated evals
 - [ ] TextArena games
-- [ ] LLM judges
+- [ ] LLM judges (advanced usage via custom judge prompts)
 - [ ] Claude-generated rubrics
 - [ ] A range of other environments (suggestions welcome!)
 - [ ] PPO
